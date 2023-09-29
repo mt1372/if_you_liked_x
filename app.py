@@ -36,7 +36,7 @@ def recommend():
     )
 
     recommendation = response["choices"][0]["message"]["content"]
-    ISBN = recommendation.split("; ")[2]
+    ISBN = recommendation.split("; ")[1]
 
 
     return jsonify(recommendation=recommendation, ISBN = ISBN)
