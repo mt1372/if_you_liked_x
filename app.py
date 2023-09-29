@@ -15,8 +15,8 @@ def after_request(response):
 
 
 # Set the OpenAI key and other configurations with environment variables
-#with open("keys.txt", "r", encoding="utf-8-sig") as file:
-  #  key = file.read().strip()
+# with open("keys.txt", "r", encoding="utf-8-sig") as file:
+#  key = file.read().strip()
 openai.api_key = os.getenv("OPENAI_API_KEY")
 
 
@@ -29,7 +29,7 @@ def recommend():
         messages=[
             {
                 "role": "system",
-                "content": "You get books and return one thoughtful recommendation that hasn't been listed. After your response, put a semicolon, space, and then only the ISBN number. Do not include the word ISBN."
+                "content": "You get books and return one thoughtful recommendation that hasn't been listed. After your response, put a semicolon, space, and then only the ISBN number. Do not include the word ISBN.",
             },
             {"role": "user", "content": f"{', '.join(books)}"},
         ],
@@ -37,9 +37,11 @@ def recommend():
 
     recommendation = response["choices"][0]["message"]["content"]
     ISBN = recommendation.split("; ")[1]
-    ISBN = ''.join([c for c in ISBN if c.isdigit()])
+    ISBN = "".join([c for c in ISBN if c.isdigit()])
 
-    return jsonify(recommendation=recommendation, ISBN = ISBN)
+    recommendation = recommendation.split("; ")[0] + "."
+    return jsonify(recommendation=recommendation, ISBN=ISBN)
+
 
 if __name__ == "__main__":
     app.run()
