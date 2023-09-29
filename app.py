@@ -37,10 +37,9 @@ def recommend():
 
     recommendation = response["choices"][0]["message"]["content"]
     ISBN = recommendation.split("; ")[1]
-
+    ISBN = ''.join([c for c in ISBN if c.isdigit()])
 
     return jsonify(recommendation=recommendation, ISBN = ISBN)
-
 
 if __name__ == "__main__":
     app.run()
