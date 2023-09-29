@@ -29,14 +29,17 @@ def recommend():
         messages=[
             {
                 "role": "system",
-                "content": "You get books and return one thoughtful recommendation. After your response, put a semicolon, space, and then the ISBN."
+                "content": "You get books and return one thoughtful recommendation. After your response, put a semicolon, space, and then only the ISBN number."
             },
             {"role": "user", "content": f"{', '.join(books)}"},
         ],
     )
 
     recommendation = response["choices"][0]["message"]["content"]
-    return jsonify(recommendation=recommendation)
+    ISBN = recommendation.split("; ")[2]
+
+
+    return jsonify(recommendation=recommendation, ISBN = ISBN)
 
 
 if __name__ == "__main__":
