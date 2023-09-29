@@ -5,22 +5,20 @@
 
     <!-- google books -->
     <meta http-equiv="content-type" content="text/html; charset=utf-8" />
-    <title>Google Books Embedded Viewer API Example</title>
+    <title>Google Books Embedded Viewer API</title>
     <script
       type="text/javascript"
       src="https://www.google.com/books/jsapi.js"
     ></script>
     <script type="text/javascript">
-      google.books.load();
+        google.books.load();
 
-      function initialize() {
-        var viewer = new google.books.DefaultViewer(
-          document.getElementById("viewerCanvas")
-        );
-        viewer.load("ISBN:0738531367");
-      }
-
-      google.books.setOnLoadCallback(initialize);
+    function initialize() {
+      var viewer = new google.books.DefaultViewer(
+        document.getElementById("viewerCanvas")
+      );
+      viewer.load("ISBN:" + ISBN);
+    }
     </script>
 
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -89,12 +87,14 @@
       <input type="text" id="book1" placeholder="Book 1" />
       <input type="text" id="book2" placeholder="Book 2" />
       <input type="text" id="book3" placeholder="Book 3" />
-      <button onclick="getRecommendation()">Get Recommendation</button>
+    <button onclick="getRecommendation()">Get Recommendation</button>
     </div>
 
     <p id="recommendation"></p>
 
     <script>
+        var ISBN;
+
       async function getRecommendation() {
         const books = [
           document.getElementById("book1").value,
@@ -115,8 +115,13 @@
         const data = await response.json();
         document.getElementById("recommendation").innerText =
           data.recommendation;
+        ISBN = data.ISBN;
+        initialize();
       }
     </script>
+     <p id="test"></p>
+
+
 
     <div id="viewerCanvas" class="viewer"></div>
   </body>
