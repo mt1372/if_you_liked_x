@@ -14,9 +14,9 @@ def after_request(response):
 
 
 # Set the OpenAI key and other configurations with environment variables
-with open("keys.txt", "r", encoding="utf-8-sig") as file:
-    key = file.read().strip()
-    openai.api_key = key
+#with open("keys.txt", "r", encoding="utf-8-sig") as file:
+  #  key = file.read().strip()
+openai.api_key = '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'
 
 
 @app.route("/recommend", methods=["POST"])
