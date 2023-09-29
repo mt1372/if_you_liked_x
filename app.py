@@ -29,7 +29,7 @@ def recommend():
         messages=[
             {
                 "role": "system",
-                "content": "You get books and return one thoughtful recommendation. After your response, repeat the book's title."
+                "content": "You get books and return one thoughtful recommendation. After your response, put a semicolon, space, and then the ISBN."
             },
             {"role": "user", "content": f"{', '.join(books)}"},
         ],
