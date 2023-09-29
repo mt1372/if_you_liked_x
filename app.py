@@ -1,5 +1,6 @@
 from flask import Flask, request, jsonify
 import openai
+import os
 
 app = Flask(__name__)
 
@@ -16,7 +17,7 @@ def after_request(response):
 # Set the OpenAI key and other configurations with environment variables
 #with open("keys.txt", "r", encoding="utf-8-sig") as file:
   #  key = file.read().strip()
-openai.api_key = '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'
+openai.api_key = os.getenv("OPENAI_API_KEY")
 
 
 @app.route("/recommend", methods=["POST"])
@@ -28,7 +29,7 @@ def recommend():
         messages=[
             {
                 "role": "system",
-                "content": "You are a book recommender. You get books and return one thoughtful recommendation.",
+                "content": "You get books and return one thoughtful recommendation. After your response, repeat the book's title."
             },
             {"role": "user", "content": f"{', '.join(books)}"},
         ],
