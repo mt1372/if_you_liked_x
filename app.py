@@ -34,4 +34,4 @@ def recommend():
     return jsonify(recommendation=recommendation)
 
 if __name__ == '__main__':
-    app.run(port=4003)
+    app.run()
