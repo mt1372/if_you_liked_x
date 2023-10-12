@@ -11,14 +11,14 @@
       src="https://www.google.com/books/jsapi.js"
     ></script>
     <script type="text/javascript">
-        google.books.load();
+      google.books.load();
 
-    function initialize() {
-      var viewer = new google.books.DefaultViewer(
-        document.getElementById("viewerCanvas")
-      );
-      viewer.load("ISBN:" + ISBN);
-    }
+      function initialize() {
+        var viewer = new google.books.DefaultViewer(
+          document.getElementById("viewerCanvas")
+        );
+        viewer.load("ISBN:" + ISBN);
+      }
     </script>
 
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -76,6 +76,10 @@
         justify-content: center;
         gap: 10px;
       }
+      #starRating {
+        margin-bottom: 10px;  /* Adds space beneath the span */
+        display: inline-block;  /* Makes margin-bottom effective for inline element */
+    }
     </style>
   </head>
   <header>
@@ -87,44 +91,64 @@
       <input type="text" id="book1" placeholder="Book 1" />
       <input type="text" id="book2" placeholder="Book 2" />
       <input type="text" id="book3" placeholder="Book 3" />
-    <button onclick="getRecommendation()">Get Recommendation</button>
+      <button onclick="getRecommendation()">Get Recommendation</button>
     </div>
 
     <p id="recommendation"></p>
-    <p id= "goodreadsRating"></p>
+    <p id="goodreads"><span id="goodreadsRating"></span> <span id="starRating"></span></p>
     <div id="viewerCanvas" class="viewer"></div>
-
 
     <script>
       var ISBN;
 
-    async function getRecommendation() {
-      const books = [
-        document.getElementById("book1").value,
-        document.getElementById("book2").value,
-        document.getElementById("book3").value,
-        document.getElementById("viewerCanvas").style.display = "block"
-      ];
+      async function getRecommendation() {
+        const books = [
+          document.getElementById("book1").value,
+          document.getElementById("book2").value,
+          document.getElementById("book3").value,
+          (document.getElementById("viewerCanvas").style.display = "block"),
+        ];
 
-      const response = await fetch(
-        "https://protected-ridge-09432-5cd2a8d7080a.herokuapp.com/recommend",
-        {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ books }),
-        }
-      );
+        const response = await fetch(
+          "https://protected-ridge-09432-5cd2a8d7080a.herokuapp.com/recommend",
+          {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ books }),
+          }
+        );
 
-      const data = await response.json();
-      document.getElementById("recommendation").innerText =
-        data.recommendation;
-      ISBN = data.ISBN;
+        const data = await response.json();
+        document.getElementById("recommendation").innerText =
+          data.recommendation;
+        ISBN = data.ISBN;
 
+        document.getElementById("goodreadsRating").innerText =
+          "Goodreads Rating: " + data.rating;
 
-     document.getElementById("goodreadsRating").innerText= "Goodreads rating: " + data.rating;
-     initialize();
-    }
-  </script>
+        displayStarRating(data.rating);
+        initialize();
+      }
 
+      function displayStarRating(rating) {
+        const starRatingElement = document.getElementById("starRating");
+
+        // Calculate full and half stars
+        const fullStars = Math.floor(rating);
+        const halfStar = rating - fullStars >= 0.5 ? 1 : 0;
+        const emptyStars = 5 - fullStars - halfStar;
+
+        // Create star representation
+        const fullStarRepresentation = "★".repeat(fullStars);
+        const halfStarRepresentation = halfStar ? "☆" : "";
+        const emptyStarRepresentation = "✩".repeat(emptyStars);
+
+        // Set the representation to the span within the span
+        starRatingElement.textContent =
+          fullStarRepresentation +
+          halfStarRepresentation +
+          emptyStarRepresentation;
+      }
+    </script>
   </body>
 </html>
