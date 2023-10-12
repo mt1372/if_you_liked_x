@@ -91,38 +91,40 @@
     </div>
 
     <p id="recommendation"></p>
+    <p id= "goodreadsRating"></p>
+    <div id="viewerCanvas" class="viewer"></div>
+
 
     <script>
-        var ISBN;
+      var ISBN;
 
-      async function getRecommendation() {
-        const books = [
-          document.getElementById("book1").value,
-          document.getElementById("book2").value,
-          document.getElementById("book3").value,
-          document.getElementById("viewerCanvas").style.display = "block"
-        ];
+    async function getRecommendation() {
+      const books = [
+        document.getElementById("book1").value,
+        document.getElementById("book2").value,
+        document.getElementById("book3").value,
+        document.getElementById("viewerCanvas").style.display = "block"
+      ];
 
-        const response = await fetch(
-          "https://protected-ridge-09432-5cd2a8d7080a.herokuapp.com/recommend",
-          {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ books }),
-          }
-        );
+      const response = await fetch(
+        "https://protected-ridge-09432-5cd2a8d7080a.herokuapp.com/recommend",
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ books }),
+        }
+      );
 
-        const data = await response.json();
-        document.getElementById("recommendation").innerText =
-          data.recommendation;
-        ISBN = data.ISBN;
-        initialize();
-      }
-    </script>
-     <p id="test"></p>
+      const data = await response.json();
+      document.getElementById("recommendation").innerText =
+        data.recommendation;
+      ISBN = data.ISBN;
 
 
+     document.getElementById("goodreadsRating").innerText= "Goodreads rating: " + data.rating;
+     initialize();
+    }
+  </script>
 
-    <div id="viewerCanvas" class="viewer"></div>
   </body>
 </html>
